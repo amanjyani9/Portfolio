@@ -12,7 +12,7 @@ def login_view(request):
     username = data.get('username')
     password = data.get('password')
     
-    if username is None or password in None:
+    if username is None or password is None:
         return JsonResponse({'detail':'please provide Username and Password'})
     
     user = authenticate(username = username, password = password)
@@ -22,6 +22,7 @@ def login_view(request):
     return JsonResponse({'detail':'Successfully Logged in'})
 
 def logout_view(request):
+    print(request.user)
     if not request.user.is_authenticated:
         return JsonResponse({'detail':'You are not logged in'},status = 400)
     logout(request)
@@ -29,11 +30,11 @@ def logout_view(request):
 
 @ensure_csrf_cookie
 def session_view(request):
-    if request.user.is_authenticated:
-        return JsonResponse({'isauthenticated':False})
-    return JsonResponse({'isauthenticated':True})
+    if not request.user.is_authenticated:
+        return JsonResponse({'isAuthenticated':False})
+    return JsonResponse({'isAuthenticated':True})
 
 def whoami_view(request):
-    if request.user.is_authenticated:
-        return JsonResponse({'isauthenticated':False})
+    if not request.user.is_authenticated:
+        return JsonResponse({'isAuthenticated':False})
     return JsonResponse({'username':request.user.username})

@@ -30,7 +30,8 @@ class App extends React.Component{
     }).catch((err)=>{console.log(err);});
   }
   whoami = () =>{
-    fetch("api\whoami",
+    
+    fetch("api/whoami",
     {headers:{"Content-Type":"application/json",},
   credentials:"same-origin",})
   .then((res)=>res.json())
@@ -42,7 +43,7 @@ class App extends React.Component{
   handlePasswordChange = (event)=>{
     this.setState({password:event.target.value});
   }
-  handleuserChange = (event)=>{
+  handleUserChange = (event)=>{
     this.setState({username:event.target.value});
   }
   isResponseOk(response){
@@ -56,7 +57,7 @@ class App extends React.Component{
   login = (event)=>{
     event.preventDefault();
 
-    fetch("/api/login",{
+    fetch("/api/login/",{
       method: "POST",
       headers:{
         "Content-Type":"application/json",
@@ -78,6 +79,7 @@ class App extends React.Component{
     });
   }
   logout = ()=>{
+    
     fetch("/api/logout",{
       crdentials:"same-origin",
     })
@@ -98,9 +100,46 @@ class App extends React.Component{
           <h1>React Cookie auth</h1>
           <br/>
           <h2>Login</h2>
+          <form onSubmit={this.login}>
+            <div className="form-group">
+              <label htmlFor="username">Username</label>
+              <input 
+              type="text" 
+              className="form-control" 
+              id="username" 
+              value={this.state.username}
+              onChange={this.handleUserChange} />
+            </div>
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input 
+              type="password" 
+              className="form-control" 
+              id="password" 
+              name="password"
+              value={this.state.password}
+              onChange={this.handlePasswordChange}
+              />
+              <div >
+                {this.state.error && <small
+                className='text-danger' >
+                  {this.state.error}
+                  </small>}
+              </div>
+              </div>
+              <button type="submit" className="btn btn-primary" style={{margin:3+'px'}}>LOGIN</button>
+          </form>
         </div>
-      )
+      );
     }
+    return(
+      <div className="container-mt-3">
+        <h1>React Cookie Auth</h1>
+        <p>you are logged in</p>
+        <button className="btn btn-primary" onClick={this.whoami}>Who AM I</button>
+        <button className="btn btn-danger" onClick={this.logout}>LOG OUT</button>
+      </div>
+    )
   }
 }
 
